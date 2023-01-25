@@ -52,7 +52,7 @@ def pep(session):
 
     downloads_dir = BASE_DIR / 'results'
     downloads_dir.mkdir(exist_ok=True)
-    file_name = f'list_status.csv'
+    file_name = 'list_status.csv'
     file_path = downloads_dir / file_name
 
     with open(file_path, 'w', encoding='utf-8') as file:
@@ -70,7 +70,9 @@ def whats_new(session):
     soup = BeautifulSoup(response.text, features='lxml')
     main_div = find_tag(soup, 'section', attrs={'id': 'what-s-new-in-python'})
     div_with_ul = find_tag(main_div, 'div', attrs={'class': 'toctree-wrapper'})
-    sections_by_python = div_with_ul.find_all('li', attrs={'class': 'toctree-l1'})
+    sections_by_python = div_with_ul.find_all(
+        'li', attrs={'class': 'toctree-l1'}
+    )
     result = [('Ссылка на статью', 'Заголовок', 'Редактор, Автор')]
     for section in tqdm(sections_by_python):
         version_a_tag = section.find('a')
@@ -135,7 +137,9 @@ def download(session):
 
     soup = BeautifulSoup(response.text, 'lxml')
     table_tag = find_tag(soup, 'table', attrs={'class': 'docutils'})
-    pdf_a4_tag = find_tag(table_tag, 'a', attrs={'href': re.compile(r'.+pdf-a4\.zip$')})
+    pdf_a4_tag = find_tag(
+        table_tag, 'a', attrs={'href': re.compile(r'.+pdf-a4\.zip$')}
+    )
 
     pdf_a4_link = pdf_a4_tag['href']
     archive_url = urljoin(downloads_url, pdf_a4_link)
