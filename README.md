@@ -8,10 +8,10 @@
 ---
 ## Contents:
 - [Introduction](#introduction)
-- [First parser: What's new?](#first-parser:-what's-new?)
-- [Second parser: Python versions](#second-parser:-python-versions)
-- [Third parser: Downloading files](#third-parser:-downloading-files)
-- [Fourth parser: Parsing PEP documents](#fourth-parser:-parsing-pep-documents)
+- [First parser. What's new?](#first-parser-what's-new?)
+- [Second parser. Python versions](#second-parser-python-versions)
+- [Third parser. Downloading files](#third-parser-downloading-files)
+- [Fourth parser. Parsing PEP documents](#fourth-parser-parsing-pep-documents)
 - [Instruction to start](#instruction-to-start)
 
 ---
@@ -21,25 +21,25 @@ The project implements parsers for searching for new information, collecting inf
 comparing and counting versions _PEP (Python Enhancement Proposals)_
 
 ----
-### <anchor>First parser: What's new?</anchor>
+### <anchor>First parser. What's new?</anchor>
 The parser collects links to articles about innovations in Python, about authors and editors of articles.
 It saves data in the format _"Link to Article","Title","Editor, Author"_
 - Documentation is taken from the link https://docs.python.org/3/whatsnew/
 - The parser is implemented in the function ___whats_new()__  (main.py_)
 
 ----
-### <anchor>Second parser: Python versions</anchor>
+### <anchor>Second parser. Python versions</anchor>
 Parser for collecting information about Python versions - numbers, statuses (_in development, pre-release, stable, and etc_) and links to documentation.
 The parser implementation uses _regular expressions (__regex___)
 - Documentation location https://docs.python.org/3/
 - The parser is implemented in the function ___latest_versions()__ (main.py_)
 ----
-### <anchor>Third parser: Downloading files</anchor>
+### <anchor>Third parser. Downloading files</anchor>
 The parser downloads the documentation of the latest version of Python to the local machine _(archive with documents in PDF format (A4 paper size))_
 - Documentation location https://docs.python.org/3/download.html
 - The parser is implemented in the function ___download()__ (main.py_)
 ----
-### <anchor>Fourth parser: Parsing PEP documents</anchor>
+### <anchor>Fourth parser. Parsing PEP documents</anchor>
 The parser collects information about PEP documents, compares the statuses of documents in a general table and in an individual card. If the information does not match, it makes an entry in the logs.
 It also saves information about the number of documents with one or another status to the _csv_ file, counts their total number.
 - PEP documentation location https://peps.python.org/
