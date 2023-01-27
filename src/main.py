@@ -7,7 +7,7 @@ from urllib.parse import urljoin
 from tqdm import tqdm
 
 from configs import configure_argument_parser, configure_logging
-from constants import BASE_DIR, MAIN_DOC_URL, PEP_DOC_URL
+from constants import BASE_DIR, LATEST_VERSION_RESULT, MAIN_DOC_URL, PEP_DOC_URL, WHATS_NEW_RESULT
 from utils import get_response, find_tag
 from outputs import control_output
 
@@ -23,29 +23,30 @@ def pep(session):
     pattern = r'(.*)\, (.*)'
     pep_status = {'total': 0}
     for pep_one in pep_common_list:
-        body_tag = pep_one.find_all('tbody')
-        for tag in body_tag:
-            tr_tag = tag.find_all('tr')
-            for tr in tr_tag:
-                text_title = re.search(pattern, tr.abbr['title'])
-                url_one = urljoin(PEP_DOC_URL, tr.a['href'])
-                response_one = get_response(session, url_one)
-                soup = BeautifulSoup(response_one.text, 'lxml')
-                pep_content = soup.find('section', {'id': 'pep-content'})
-                abbr_tg = pep_content.find_all('abbr')
+        tr_tag = pep_one.find_all('tr')
+        for tr in tr_tag[1:]:
+            text_title = re.search(pattern, tr.abbr['title'])
+            url_one = urljoin(PEP_DOC_URL, tr.a['href'])
+            response_one = get_response(session, url_one)
+            soup = BeautifulSoup(response_one.text, 'lxml')
+            pep_content = soup.find('section', {'id': 'pep-content'})
+            abbr_tg = pep_content.find_all('abbr')
+            pep_status_card = abbr_tg[0].text
+            pep_status_list = text_title.group(2)
 
-                if abbr_tg[0].text in pep_status:
-                    pep_status[abbr_tg[0].text] += 1
-                else:
-                    pep_status[abbr_tg[0].text] = 1
-                pep_status['total'] += 1
 
-                if text_title.group(2) != abbr_tg[0].text:
-                    logging.info(
-                        f'Несовпадающие статусы: {url_one}. '
-                        f'Статус в карточке: {abbr_tg[0].text}. '
-                        f'Ожидаемые статусы: ["{text_title.group(2)}"]'
-                    )
+            if pep_status_card in pep_status:
+                pep_status[pep_status_card] += 1
+            else:
+                pep_status[pep_status_card] = 1
+            pep_status['total'] += 1
+
+            if pep_status_list != pep_status_card:
+                logging.info(
+                    f'Несовпадающие статусы: {url_one}. '
+                    f'Статус в карточке: {pep_status_card}. '
+                    f'Ожидаемые статусы: ["{pep_status_list}"]'
+                )
     pep_status_dict = []
     for i in pep_status:
         pep_status_dict.append([i, pep_status[i]])
@@ -73,7 +74,7 @@ def whats_new(session):
     sections_by_python = div_with_ul.find_all(
         'li', attrs={'class': 'toctree-l1'}
     )
-    result = [('Ссылка на статью', 'Заголовок', 'Редактор, Автор')]
+    result = WHATS_NEW_RESULT
     for section in tqdm(sections_by_python):
         version_a_tag = section.find('a')
         href = version_a_tag['href']
@@ -109,9 +110,9 @@ def latest_versions(session):
             a_tags = ul.find_all('a')
             break
         else:
-            raise Exception('Ничего не нашлось')
+            raise Exception('Тэг <a> с текстом "All version" не найден')
 
-    results = [('Ссылка на документацию', 'Версия', 'Статус')]
+    results = LATEST_VERSION_RESULT
     pattern = r'Python (?P<version>\d\.\d+) \((?P<status>.*)\)'
     for a_tag in a_tags:
         link = a_tag['href']
