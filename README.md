@@ -8,7 +8,7 @@
 ---
 ## Contents:
 - [Introduction](#introduction)
-- [First parser. What's new?](#first-parser-what's-new?)
+- [First parser. What's new?](#first-parser-whats-new?)
 - [Second parser. Python versions](#second-parser-python-versions)
 - [Third parser. Downloading files](#third-parser-downloading-files)
 - [Fourth parser. Parsing PEP documents](#fourth-parser-parsing-pep-documents)
