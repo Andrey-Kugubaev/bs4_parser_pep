@@ -7,7 +7,13 @@ from urllib.parse import urljoin
 from tqdm import tqdm
 
 from configs import configure_argument_parser, configure_logging
-from constants import BASE_DIR, LATEST_VERSION_RESULT, MAIN_DOC_URL, PEP_DOC_URL, WHATS_NEW_RESULT
+from constants import (
+    BASE_DIR,
+    LATEST_VERSION_RESULT,
+    MAIN_DOC_URL,
+    PEP_DOC_URL,
+    WHATS_NEW_RESULT
+)
 from utils import get_response, find_tag
 from outputs import control_output
 
@@ -33,7 +39,6 @@ def pep(session):
             abbr_tg = pep_content.find_all('abbr')
             pep_status_card = abbr_tg[0].text
             pep_status_list = text_title.group(2)
-
 
             if pep_status_card in pep_status:
                 pep_status[pep_status_card] += 1
